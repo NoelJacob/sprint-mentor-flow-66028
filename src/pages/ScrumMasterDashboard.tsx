@@ -383,7 +383,7 @@ const ScrumMasterDashboard = () => {
               onEscalate={handleEscalate}
             />
 
-            {/* <NudgeHistory /> */}
+            <NudgeHistory />
           </div>
 
           <div className="space-y-4 sm:space-y-6">
