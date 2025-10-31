@@ -41,10 +41,25 @@ export interface JiraIssue {
 export interface JiraSprint {
   id: number;
   name: string;
-  state: string; // 'active' | 'future' | 'closed'
+  state: 'active' | 'future' | 'closed';
   startDate?: string;
   endDate?: string;
   completeDate?: string;
+}
+
+// Define interface for Jira API issue response
+interface JiraApiIssue {
+  id: string;
+  key: string;
+  fields: {
+    summary: string;
+    status: { name: string };
+    assignee?: { displayName: string };
+    priority?: { name: string };
+    created: string;
+    updated: string;
+    description?: string;
+  };
 }
 
 // Fetch issues from a Jira project
@@ -63,7 +78,7 @@ export const fetchJiraIssues = async (projectKey: string): Promise<JiraIssue[]> 
       fields: ['summary', 'status', 'assignee', 'priority', 'created', 'updated', 'description'],
     });
 
-    return response.issues?.map((issue: any) => ({
+    return response.issues?.map((issue: JiraApiIssue) => ({
       id: issue.id,
       key: issue.key,
       summary: issue.fields.summary,
@@ -80,6 +95,16 @@ export const fetchJiraIssues = async (projectKey: string): Promise<JiraIssue[]> 
   }
 };
 
+// Define interface for Jira API sprint response
+interface JiraApiSprint {
+  id: number;
+  name: string;
+  state: string;
+  startDate?: string;
+  endDate?: string;
+  completeDate?: string;
+}
+
 // Fetch sprints for a board
 export const fetchJiraSprints = async (boardId: number): Promise<JiraSprint[]> => {
   const client = initJiraClient();
@@ -93,10 +118,10 @@ export const fetchJiraSprints = async (boardId: number): Promise<JiraSprint[]> =
       boardId,
     });
 
-    return response.values?.map((sprint: any) => ({
+    return response.values?.map((sprint: JiraApiSprint) => ({
       id: sprint.id,
       name: sprint.name,
-      state: sprint.state.toLowerCase(),
+      state: sprint.state.toLowerCase() as JiraSprint['state'],
       startDate: sprint.startDate,
       endDate: sprint.endDate,
       completeDate: sprint.completeDate,
@@ -122,7 +147,7 @@ export const fetchSprintIssues = async (sprintId: number): Promise<JiraIssue[]> 
       fields: ['summary', 'status', 'assignee', 'priority', 'created', 'updated', 'description'],
     });
 
-    return response.issues?.map((issue: any) => ({
+    return response.issues?.map((issue: JiraApiIssue) => ({
       id: issue.id,
       key: issue.key,
       summary: issue.fields.summary,

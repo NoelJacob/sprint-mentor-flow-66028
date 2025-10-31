@@ -14,7 +14,7 @@ export const SprintBoard = ({ tasks }: SprintBoardProps) => {
     { id: 'done', title: 'Done', color: 'bg-green-100' },
   ];
 
-  const getTasksByStatus = (status: string) => {
+  const getTasksByStatus = (status: Task['status']) => {
     return tasks.filter(task => task.status === status);
   };
 

@@ -114,11 +114,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setIsLoadingJira(true);
     try {
       const projectKey = import.meta.env.VITE_JIRA_PROJECT_KEY || 'PROJ';
-      const boardId = parseInt(import.meta.env.VITE_JIRA_BOARD_ID || '1');
+      const boardIdString = import.meta.env.VITE_JIRA_BOARD_ID || '1';
+      const boardId = parseInt(boardIdString, 10);
+      
+      // Validate boardId is a valid number
+      if (isNaN(boardId)) {
+        console.warn('Invalid VITE_JIRA_BOARD_ID, using default value 1');
+      }
 
       // Fetch sprints and issues
       const [jiraSprints, jiraIssues] = await Promise.all([
-        fetchJiraSprints(boardId),
+        fetchJiraSprints(isNaN(boardId) ? 1 : boardId),
         fetchJiraIssues(projectKey),
       ]);
 

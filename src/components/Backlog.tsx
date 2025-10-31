@@ -21,9 +21,14 @@ export const Backlog = ({ tasks }: BacklogProps) => {
     }
   };
 
+  const priorityOrder: Record<Task['priority'], number> = { 
+    high: 0, 
+    medium: 1, 
+    low: 2 
+  };
+
   const sortedTasks = [...tasks].sort((a, b) => {
-    const priorityOrder = { high: 0, medium: 1, low: 2 };
-    return priorityOrder[a.priority as keyof typeof priorityOrder] - priorityOrder[b.priority as keyof typeof priorityOrder];
+    return priorityOrder[a.priority] - priorityOrder[b.priority];
   });
 
   return (

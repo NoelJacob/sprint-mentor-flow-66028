@@ -1,9 +1,9 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 let genAI: GoogleGenerativeAI | null = null;
-let model: any = null;
+let model: GenerativeModel | null = null;
 
 // Initialize Gemini AI
 export const initGeminiAI = () => {
