@@ -1,27 +1,23 @@
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { MetricCard } from "@/components/MetricCard";
-import { NudgeCard } from "@/components/NudgeCard";
 import { EventSimulator } from "@/components/EventSimulator";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { EngagementChart } from "@/components/EngagementChart";
 import { ActionLog } from "@/components/ActionLog";
 import { AIChat } from "@/components/AIChat";
-import { PersonaSwitcher } from "@/components/PersonaSwitcher";
 import { NudgeHistory } from "@/components/NudgeHistory";
 import { SettingsPanel } from "@/components/SettingsPanel";
 import { TrendAnalytics } from "@/components/TrendAnalytics";
 import { RiskSimulation } from "@/components/RiskSimulation";
 import { StandUpSummary } from "@/components/StandUpSummary";
 import { SprintHealthScore } from "@/components/SprintHealthScore";
+import { DashboardHeader } from "@/components/DashboardHeader";
+import { NudgesList } from "@/components/NudgesList";
 import { useAppContext } from "@/contexts/AppContext";
 import { Nudge } from "@/types";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const ScrumMasterDashboard = () => {
-  const navigate = useNavigate();
   const { scrumMetrics, setScrumMetrics, addActionLog, setCurrentPersona, addNudgeHistory, setSprintHealthScore } = useAppContext();
   const [showOnboarding, setShowOnboarding] = useState(true);
   const nudgesRef = useRef<HTMLDivElement>(null);
@@ -47,17 +43,17 @@ const ScrumMasterDashboard = () => {
     },
   ]);
 
-  const scrollToNudges = () => {
+  const scrollToNudges = useCallback(() => {
     nudgesRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
-  const handleEscalate = (nudgeId: string) => {
-    setNudges(nudges.map(n => 
+  const handleEscalate = useCallback((nudgeId: string) => {
+    setNudges(prev => prev.map(n => 
       n.id === nudgeId ? { ...n, taskCreated: true, escalated: true } : n
     ));
-  };
+  }, []);
 
-  const handleNudgeAction = (nudgeId: string, actionType: string, actionLabel?: string) => {
+  const handleNudgeAction = useCallback((nudgeId: string, actionType: string, actionLabel?: string) => {
     const nudge = nudges.find(n => n.id === nudgeId);
     
     if (actionType === 'dismiss') {
@@ -184,60 +180,60 @@ const ScrumMasterDashboard = () => {
         });
       }
     }
-  };
+  }, [nudges, scrumMetrics, setScrumMetrics, setSprintHealthScore, addActionLog, addNudgeHistory]);
 
-  const handleTriggerEvent = (eventType: string) => {
-    const eventNudges: Record<string, Nudge> = {
+  const handleTriggerEvent = useCallback((eventType: string) => {
+    const eventNudges = {
       'low-engagement': {
         id: Date.now().toString(),
-        type: 'warning',
+        type: 'warning' as const,
         title: 'Low Engagement Detected',
         description: 'Daily standup attendance has dropped to 70%. Team members may need support or schedule adjustment.',
         actions: [
-          { label: 'Schedule 1-on-1s', type: 'accept' },
-          { label: 'Adjust Time', type: 'accept' },
-          { label: 'Snooze', type: 'snooze' },
+          { label: 'Schedule 1-on-1s', type: 'accept' as const },
+          { label: 'Adjust Time', type: 'accept' as const },
+          { label: 'Snooze', type: 'snooze' as const },
         ],
         timestamp: new Date(),
       },
       'overdue-retro': {
         id: Date.now().toString(),
-        type: 'alert',
+        type: 'alert' as const,
         title: 'Retrospective Overdue',
         description: 'Sprint retrospective is 2 days overdue. Schedule immediately to maintain team momentum.',
         actions: [
-          { label: 'Schedule Now', type: 'accept' },
-          { label: 'Dismiss', type: 'dismiss' },
+          { label: 'Schedule Now', type: 'accept' as const },
+          { label: 'Dismiss', type: 'dismiss' as const },
         ],
         timestamp: new Date(),
       },
       'blocker-added': {
         id: Date.now().toString(),
-        type: 'alert',
+        type: 'alert' as const,
         title: 'New Blocker Added',
         description: '3 stories are now blocked by external dependency. Escalation may be needed.',
         actions: [
-          { label: 'Escalate', type: 'escalate' },
-          { label: 'Track Progress', type: 'accept' },
-          { label: 'Dismiss', type: 'dismiss' },
+          { label: 'Escalate', type: 'escalate' as const },
+          { label: 'Track Progress', type: 'accept' as const },
+          { label: 'Dismiss', type: 'dismiss' as const },
         ],
         timestamp: new Date(),
       },
       'sprint-health-drop': {
         id: Date.now().toString(),
-        type: 'warning',
+        type: 'warning' as const,
         title: 'Sprint Health Drop',
         description: 'Sprint completion probability dropped from 87% to 65%. Consider scope adjustment.',
         actions: [
-          { label: 'Review Scope', type: 'accept' },
-          { label: 'Add Capacity', type: 'accept' },
-          { label: 'Snooze', type: 'snooze' },
+          { label: 'Review Scope', type: 'accept' as const },
+          { label: 'Add Capacity', type: 'accept' as const },
+          { label: 'Snooze', type: 'snooze' as const },
         ],
         timestamp: new Date(),
       },
     };
 
-    const newNudge = eventNudges[eventType];
+    const newNudge = eventNudges[eventType as keyof typeof eventNudges];
     if (newNudge) {
       setNudges(prev => [newNudge, ...prev]);
       toast.info("New event triggered!");
@@ -257,7 +253,7 @@ const ScrumMasterDashboard = () => {
         ));
       }
     }
-  };
+  }, [setScrumMetrics]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -267,27 +263,11 @@ const ScrumMasterDashboard = () => {
         persona="scrum-master"
       />
       
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-4 py-3 sm:py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="flex-shrink-0">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl font-bold truncate">Scrum Master Dashboard</h1>
-                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Monitor sprint health and team engagement</p>
-              </div>
-            </div>
-            <div className="flex gap-2 self-end sm:self-auto">
-              <PersonaSwitcher />
-              <Button variant="outline" size="sm" onClick={() => setShowOnboarding(true)} className="whitespace-nowrap">
-                Show Guide
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader 
+        title="Scrum Master Dashboard"
+        subtitle="Monitor sprint health and team engagement"
+        onShowGuide={() => setShowOnboarding(true)}
+      />
 
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -313,28 +293,12 @@ const ScrumMasterDashboard = () => {
 
             <TrendAnalytics />
 
-            <div ref={nudgesRef}>
-              <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">AI Nudges</h2>
-              <div className="space-y-2 sm:space-y-3">
-                {nudges.filter(n => !n.dismissed && !n.snoozed).length === 0 ? (
-                  <div className="text-center py-8 sm:py-12 text-muted-foreground">
-                    <p className="text-sm sm:text-base">All caught up! No active nudges.</p>
-                    <p className="text-xs sm:text-sm mt-2">Use the simulator to trigger events →</p>
-                  </div>
-                ) : (
-                  nudges
-                    .filter(n => !n.dismissed && !n.snoozed)
-                    .map(nudge => (
-                      <NudgeCard 
-                        key={nudge.id} 
-                        nudge={nudge} 
-                        onAction={handleNudgeAction}
-                        onEscalate={handleEscalate}
-                      />
-                    ))
-                )}
-              </div>
-            </div>
+            <NudgesList 
+              ref={nudgesRef}
+              nudges={nudges}
+              onAction={handleNudgeAction}
+              onEscalate={handleEscalate}
+            />
 
             <NudgeHistory />
           </div>

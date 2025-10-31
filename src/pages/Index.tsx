@@ -26,7 +26,7 @@ const Index = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-primary bg-clip-text text-transparent px-4">
               Agentic AI Coach
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4 leading-relaxed">
               Real-time insights and proactive nudges for Scrum Masters and Tech Leads. 
               Choose your persona to explore the dashboard.
             </p>
@@ -44,23 +44,23 @@ const Index = () => {
           </div>
 
           <div className="mt-10 sm:mt-16 text-center px-4">
-            <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">Key Features</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 uppercase tracking-wider font-medium">Key Features</p>
             <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto">
-              <div className="p-3 sm:p-4 rounded-lg bg-card border">
-                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2">Real-time Metrics</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground">
+              <div className="p-3 sm:p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-300">
+                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Real-time Metrics</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   Monitor sprint health, engagement, and velocity
                 </p>
               </div>
-              <div className="p-3 sm:p-4 rounded-lg bg-card border">
-                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2">Smart Nudges</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground">
+              <div className="p-3 sm:p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-300">
+                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Smart Nudges</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   AI-powered recommendations with actionable insights
                 </p>
               </div>
-              <div className="p-3 sm:p-4 rounded-lg bg-card border">
-                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2">Interactive Simulator</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground">
+              <div className="p-3 sm:p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-300">
+                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Interactive Simulator</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   Trigger events and see AI responses in real-time
                 </p>
               </div>

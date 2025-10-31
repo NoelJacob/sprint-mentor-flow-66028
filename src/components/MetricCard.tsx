@@ -8,7 +8,7 @@ interface MetricCardProps {
 }
 
 export const MetricCard = ({ metric }: MetricCardProps) => {
-  const getStatusColor = (status?: string) => {
+  const getStatusColor = (status?: string): string => {
     switch (status) {
       case 'healthy':
         return 'bg-success/10 text-success';
@@ -35,9 +35,9 @@ export const MetricCard = ({ metric }: MetricCardProps) => {
   };
 
   return (
-    <Card className="p-3 sm:p-4 hover:shadow-md transition-shadow">
+    <Card className="p-3 sm:p-4 hover:shadow-lg transition-all duration-300 animate-fade-in">
       <div className="flex items-start justify-between mb-1.5 sm:mb-2">
-        <span className="text-xs sm:text-sm text-muted-foreground">{metric.label}</span>
+        <span className="text-xs sm:text-sm text-muted-foreground font-medium">{metric.label}</span>
         {metric.status && (
           <Badge variant="outline" className={`${getStatusColor(metric.status)} text-[10px] sm:text-xs px-1.5 sm:px-2`}>
             {metric.status}

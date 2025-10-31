@@ -26,13 +26,13 @@ export const NudgeCard = ({ nudge, onAction, onEscalate }: NudgeCardProps) => {
   const getPriorityColor = () => {
     switch (nudge.priority) {
       case 'critical':
-        return 'border-red-500';
+        return 'border-destructive';
       case 'high':
-        return 'border-orange-500';
+        return 'border-warning';
       case 'medium':
-        return 'border-yellow-500';
+        return 'border-warning/60';
       default:
-        return 'border-gray-300';
+        return 'border-border';
     }
   };
 
@@ -59,7 +59,7 @@ export const NudgeCard = ({ nudge, onAction, onEscalate }: NudgeCardProps) => {
   };
 
   return (
-    <Card className={`p-3 sm:p-4 ${getBorderColor()} ${getPriorityColor()} animate-in slide-in-from-right duration-300`}>
+    <Card className={`p-3 sm:p-4 ${getBorderColor()} ${getPriorityColor()} transition-all duration-300 hover:shadow-md`}>
       <div className="flex gap-2 sm:gap-3">
         <div className="flex-shrink-0 mt-0.5">{getIcon()}</div>
         <div className="flex-1 min-w-0">
@@ -96,6 +96,7 @@ export const NudgeCard = ({ nudge, onAction, onEscalate }: NudgeCardProps) => {
               size="icon"
               className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0"
               onClick={() => onAction(nudge.id, 'dismiss')}
+              aria-label="Dismiss nudge"
             >
               <X className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>

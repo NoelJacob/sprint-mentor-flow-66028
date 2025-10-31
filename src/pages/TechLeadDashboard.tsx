@@ -1,26 +1,22 @@
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { MetricCard } from "@/components/MetricCard";
-import { NudgeCard } from "@/components/NudgeCard";
 import { EventSimulator } from "@/components/EventSimulator";
 import { DependencyMap } from "@/components/DependencyMap";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { ProgressVisualization } from "@/components/ProgressVisualization";
 import { ActionLog } from "@/components/ActionLog";
 import { AIChat } from "@/components/AIChat";
-import { PersonaSwitcher } from "@/components/PersonaSwitcher";
 import { NudgeHistory } from "@/components/NudgeHistory";
 import { SettingsPanel } from "@/components/SettingsPanel";
 import { TrendAnalytics } from "@/components/TrendAnalytics";
 import { RiskSimulation } from "@/components/RiskSimulation";
+import { DashboardHeader } from "@/components/DashboardHeader";
+import { NudgesList } from "@/components/NudgesList";
 import { useAppContext } from "@/contexts/AppContext";
 import { Nudge } from "@/types";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const TechLeadDashboard = () => {
-  const navigate = useNavigate();
   const { techMetrics, setTechMetrics, dependencies, setDependencies, addActionLog, setCurrentPersona, addNudgeHistory } = useAppContext();
   const [showOnboarding, setShowOnboarding] = useState(true);
   const nudgesRef = useRef<HTMLDivElement>(null);
@@ -46,13 +42,13 @@ const TechLeadDashboard = () => {
     },
   ]);
 
-  const handleEscalate = (nudgeId: string) => {
-    setNudges(nudges.map(n => 
+  const handleEscalate = useCallback((nudgeId: string) => {
+    setNudges(prev => prev.map(n => 
       n.id === nudgeId ? { ...n, taskCreated: true, escalated: true } : n
     ));
-  };
+  }, []);
 
-  const handleNudgeAction = (nudgeId: string, actionType: string, actionLabel?: string) => {
+  const handleNudgeAction = useCallback((nudgeId: string, actionType: string, actionLabel?: string) => {
     const nudge = nudges.find(n => n.id === nudgeId);
     
     if (actionType === 'dismiss') {
@@ -114,61 +110,61 @@ const TechLeadDashboard = () => {
         });
       }
     }
-  };
+  }, [nudges, techMetrics, setTechMetrics, setDependencies, addActionLog]);
 
-  const handleTriggerEvent = (eventType: string) => {
-    const eventNudges: Record<string, Nudge> = {
+  const handleTriggerEvent = useCallback((eventType: string) => {
+    const eventNudges = {
       'story-blocked': {
         id: Date.now().toString(),
-        type: 'alert',
+        type: 'alert' as const,
         title: '3 Stories Blocked',
         description: 'Multiple stories are blocked waiting for database schema changes. Consider parallel work or temporary solutions.',
         actions: [
-          { label: 'Create Workaround', type: 'accept' },
-          { label: 'Escalate', type: 'escalate' },
-          { label: 'Dismiss', type: 'dismiss' },
+          { label: 'Create Workaround', type: 'accept' as const },
+          { label: 'Escalate', type: 'escalate' as const },
+          { label: 'Dismiss', type: 'dismiss' as const },
         ],
         timestamp: new Date(),
       },
       'api-delay': {
         id: Date.now().toString(),
-        type: 'warning',
+        type: 'warning' as const,
         title: 'API Delivery Delayed',
         description: 'Third-party API integration is delayed by 3 days. 5 dependent stories may miss sprint deadline.',
         actions: [
-          { label: 'Reschedule', type: 'accept' },
-          { label: 'Mock API', type: 'accept' },
-          { label: 'Escalate', type: 'escalate' },
+          { label: 'Reschedule', type: 'accept' as const },
+          { label: 'Mock API', type: 'accept' as const },
+          { label: 'Escalate', type: 'escalate' as const },
         ],
         timestamp: new Date(),
       },
       'tech-debt-spike': {
         id: Date.now().toString(),
-        type: 'warning',
+        type: 'warning' as const,
         title: 'Technical Debt Spike',
         description: 'Tech debt increased by 15% this sprint. Consider allocating time for refactoring.',
         actions: [
-          { label: 'Schedule Refactor', type: 'accept' },
-          { label: 'Review with Team', type: 'accept' },
-          { label: 'Snooze', type: 'snooze' },
+          { label: 'Schedule Refactor', type: 'accept' as const },
+          { label: 'Review with Team', type: 'accept' as const },
+          { label: 'Snooze', type: 'snooze' as const },
         ],
         timestamp: new Date(),
       },
       'dependency-risk': {
         id: Date.now().toString(),
-        type: 'alert',
+        type: 'alert' as const,
         title: 'Dependency Risk Alert',
         description: 'Critical path dependency has new blocker. Sprint goal completion at high risk.',
         actions: [
-          { label: 'Emergency Review', type: 'accept' },
-          { label: 'Escalate', type: 'escalate' },
-          { label: 'Dismiss', type: 'dismiss' },
+          { label: 'Emergency Review', type: 'accept' as const },
+          { label: 'Escalate', type: 'escalate' as const },
+          { label: 'Dismiss', type: 'dismiss' as const },
         ],
         timestamp: new Date(),
       },
     };
 
-    const newNudge = eventNudges[eventType];
+    const newNudge = eventNudges[eventType as keyof typeof eventNudges];
     if (newNudge) {
       setNudges(prev => [newNudge, ...prev]);
       toast.info("New event triggered!");
@@ -191,7 +187,7 @@ const TechLeadDashboard = () => {
         ));
       }
     }
-  };
+  }, [setTechMetrics, setDependencies]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -201,27 +197,11 @@ const TechLeadDashboard = () => {
         persona="tech-lead"
       />
       
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-4 py-3 sm:py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="flex-shrink-0">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl font-bold truncate">Tech Lead Dashboard</h1>
-                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Track stories, dependencies, and technical health</p>
-              </div>
-            </div>
-            <div className="flex gap-2 self-end sm:self-auto">
-              <PersonaSwitcher />
-              <Button variant="outline" size="sm" onClick={() => setShowOnboarding(true)} className="whitespace-nowrap">
-                Show Guide
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader 
+        title="Tech Lead Dashboard"
+        subtitle="Track stories, dependencies, and technical health"
+        onShowGuide={() => setShowOnboarding(true)}
+      />
 
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -241,28 +221,12 @@ const TechLeadDashboard = () => {
 
             <TrendAnalytics />
 
-            <div ref={nudgesRef}>
-              <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">AI Nudges</h2>
-              <div className="space-y-2 sm:space-y-3">
-                {nudges.filter(n => !n.dismissed && !n.snoozed).length === 0 ? (
-                  <div className="text-center py-8 sm:py-12 text-muted-foreground">
-                    <p className="text-sm sm:text-base">All caught up! No active nudges.</p>
-                    <p className="text-xs sm:text-sm mt-2">Use the simulator to trigger events →</p>
-                  </div>
-                ) : (
-                  nudges
-                    .filter(n => !n.dismissed && !n.snoozed)
-                    .map(nudge => (
-                      <NudgeCard 
-                        key={nudge.id} 
-                        nudge={nudge} 
-                        onAction={handleNudgeAction}
-                        onEscalate={handleEscalate}
-                      />
-                    ))
-                )}
-              </div>
-            </div>
+            <NudgesList 
+              ref={nudgesRef}
+              nudges={nudges}
+              onAction={handleNudgeAction}
+              onEscalate={handleEscalate}
+            />
 
             <NudgeHistory />
           </div>
