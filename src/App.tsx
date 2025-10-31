@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { AppProvider } from "@/contexts/AppContext";
+import { AppProvider } from "@/contexts/AppProvider";
 import Index from "./pages/Index";
 
 // Lazy load dashboard pages for better performance
@@ -21,7 +21,13 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-muted-foreground">Loading...</div></div>}>
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="text-muted-foreground">Loading...</div>
+              </div>
+            }
+          >
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/scrum-master" element={<ScrumMasterDashboard />} />

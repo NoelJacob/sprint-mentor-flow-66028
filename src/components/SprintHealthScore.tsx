@@ -8,21 +8,35 @@ export const SprintHealthScore = () => {
   const { sprintHealthScore, scrumMetrics } = useAppContext();
 
   const getHealthStatus = () => {
-    if (sprintHealthScore >= 80) return { label: 'Excellent', color: 'text-green-600', bgColor: 'bg-green-500' };
-    if (sprintHealthScore >= 60) return { label: 'Good', color: 'text-blue-600', bgColor: 'bg-blue-500' };
-    if (sprintHealthScore >= 40) return { label: 'Fair', color: 'text-amber-600', bgColor: 'bg-amber-500' };
-    return { label: 'Poor', color: 'text-red-600', bgColor: 'bg-red-500' };
+    if (sprintHealthScore >= 80)
+      return {
+        label: "Excellent",
+        color: "text-green-600",
+        bgColor: "bg-green-500",
+      };
+    if (sprintHealthScore >= 60)
+      return { label: "Good", color: "text-blue-600", bgColor: "bg-blue-500" };
+    if (sprintHealthScore >= 40)
+      return {
+        label: "Fair",
+        color: "text-amber-600",
+        bgColor: "bg-amber-500",
+      };
+    return { label: "Poor", color: "text-red-600", bgColor: "bg-red-500" };
   };
 
   const status = getHealthStatus();
-  const velocityChange = scrumMetrics.find(m => m.label === "Velocity")?.change || 0;
+  const velocityChange =
+    scrumMetrics.find((m) => m.label === "Velocity")?.change || 0;
 
   return (
     <Card className="p-4 sm:p-6 border-l-4 border-primary bg-gradient-to-br from-primary/10 to-transparent animate-in scale-in duration-500">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Activity className="w-5 h-5 text-primary" />
-          <h3 className="text-base sm:text-lg font-semibold">Sprint Health Index</h3>
+          <h3 className="text-base sm:text-lg font-semibold">
+            Sprint Health Index
+          </h3>
         </div>
         <Badge variant="outline" className={`text-xs ${status.color}`}>
           {status.label}
@@ -32,7 +46,7 @@ export const SprintHealthScore = () => {
       <div className="relative mb-4">
         <Progress value={sprintHealthScore} className="h-12 sm:h-16" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className={`text-2xl sm:text-3xl font-bold ${status.color}`}>
+          <span className={"text-2xl sm:text-3xl font-bold text-white"}>
             {sprintHealthScore}
           </span>
         </div>
@@ -60,20 +74,30 @@ export const SprintHealthScore = () => {
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Engagement</span>
           <span className="font-medium">
-            {scrumMetrics.find(m => m.label === "Team Engagement")?.value}
+            {scrumMetrics.find((m) => m.label === "Team Engagement")?.value}
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Blockers</span>
           <span className="font-medium">
-            {scrumMetrics.find(m => m.label === "Active Blockers")?.value} active
+            {scrumMetrics.find((m) => m.label === "Active Blockers")?.value}{" "}
+            active
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Velocity Trend</span>
-          <span className={`font-medium flex items-center gap-1 ${velocityChange > 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {velocityChange > 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-            {velocityChange > 0 ? '+' : ''}{velocityChange}%
+          <span
+            className={`font-medium flex items-center gap-1 ${
+              velocityChange > 0 ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {velocityChange > 0 ? (
+              <TrendingUp className="w-3 h-3" />
+            ) : (
+              <TrendingDown className="w-3 h-3" />
+            )}
+            {velocityChange > 0 ? "+" : ""}
+            {velocityChange}%
           </span>
         </div>
       </div>
