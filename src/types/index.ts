@@ -61,12 +61,18 @@ export interface Metric {
   status?: 'healthy' | 'warning' | 'critical';
 }
 
-export interface UserStory {
+// Renamed from UserStory to Task to remove SCRUM terminology
+export interface Task {
   id: string;
+  key: string;
   title: string;
-  status: 'todo' | 'in-progress' | 'blocked' | 'done';
+  status: 'to-do' | 'in-progress' | 'blocked' | 'done';
   priority: 'low' | 'medium' | 'high';
+  assignee?: string;
   blockedBy?: string;
+  description?: string;
+  created?: string;
+  updated?: string;
 }
 
 export interface DependencyNode {
@@ -74,4 +80,25 @@ export interface DependencyNode {
   title: string;
   status: 'healthy' | 'at-risk' | 'blocked';
   dependencies: string[];
+}
+
+// New interfaces for Jira integration
+export interface Sprint {
+  id: number;
+  name: string;
+  state: 'active' | 'future' | 'closed';
+  startDate?: string;
+  endDate?: string;
+  completeDate?: string;
+}
+
+export interface SprintData {
+  sprint: Sprint;
+  tasks: Task[];
+  metrics: {
+    total: number;
+    completed: number;
+    inProgress: number;
+    blocked: number;
+  };
 }
