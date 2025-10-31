@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sparkles, Send } from "lucide-react";
+import { sendChatMessage } from "@/services/geminiService";
 
 interface Message {
   id: string;
@@ -20,17 +21,10 @@ export const AIChat = () => {
     }
   ]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const predefinedResponses: Record<string, string> = {
-    'velocity': "Your team velocity dropped last sprint from 48 to 42 points. Consider reviewing story estimates and checking for hidden blockers.",
-    'engagement': "Team engagement is at 78%. I recommend a quick morale check-in and trying a new retrospective format.",
-    'blockers': "There are 3 active blockers. The payment API delay is affecting 3 stories. I suggest escalating to stakeholders.",
-    'debt': "Tech debt is at 23% and trending up. Schedule a refactoring session in the next sprint to prevent accumulation.",
-    'default': "I can help you with: team velocity, engagement trends, blockers, tech debt, or sprint health. What would you like to explore?"
-  };
-
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -39,28 +33,30 @@ export const AIChat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
 
-    // Simple keyword matching for demo
-    const lowerInput = input.toLowerCase();
-    let response = predefinedResponses.default;
-    
-    for (const [key, value] of Object.entries(predefinedResponses)) {
-      if (lowerInput.includes(key)) {
-        response = value;
-        break;
-      }
-    }
-
-    setTimeout(() => {
+    try {
+      const response = await sendChatMessage(input);
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: response
       };
-      setMessages(prev => [...prev, assistantMessage]);
-    }, 500);
 
-    setInput('');
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "I apologize, but I'm having trouble responding right now. Please try again."
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -88,6 +84,13 @@ export const AIChat = () => {
               </div>
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg bg-muted">
+                <p className="text-xs sm:text-sm text-muted-foreground">Thinking...</p>
+              </div>
+            </div>
+          )}
         </div>
       </ScrollArea>
 
@@ -96,10 +99,11 @@ export const AIChat = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Ask about velocity, engagement..."
+          placeholder="Ask about tasks, health, or blockers..."
           className="flex-1 text-xs sm:text-sm h-9"
+          disabled={isLoading}
         />
-        <Button onClick={handleSend} size="icon" className="h-9 w-9 flex-shrink-0">
+        <Button onClick={handleSend} size="icon" className="h-9 w-9 flex-shrink-0" disabled={isLoading}>
           <Send className="w-3 sm:w-4 h-3 sm:h-4" />
         </Button>
       </div>
