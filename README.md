@@ -1,73 +1,150 @@
-# Welcome to your Lovable project
+# Sprint Manager - Jira-Synced SCRUM Tool
 
-## Project info
+A personalized sprint management tool with Jira integration and AI assistance powered by Google Gemini.
 
-**URL**: https://lovable.dev/projects/b032f44c-6a5e-4a24-b79b-4607a5cbfa4d
+## Features
 
-## How can I edit this code?
+- **Jira Integration**: Two-way sync with Jira for tasks, sprints, and backlog
+- **AI Assistant**: Gemini-powered chat for sprint insights and recommendations
+- **Role-Based Dashboards**: Customized views for Scrum Masters and Tech Leads
+- **Sprint Board**: Kanban-style board with To Do, In Progress, Blocked, and Done columns
+- **Health Metrics**: Track sprint health, team engagement, and blockers
+- **Simple Terms**: Uses familiar terms (Task, Sprint, Blocked, Done) - no complex agile jargon
 
-There are several ways of editing your application.
+## Setup
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/b032f44c-6a5e-4a24-b79b-4607a5cbfa4d) and start prompting.
+- Node.js & npm ([install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+- Jira account (optional - app works with mock data)
+- Google Gemini API key (optional - app works with mock responses)
 
-Changes made via Lovable will be committed automatically to this repo.
+### Installation
 
-**Use your preferred IDE**
+1. Clone the repository:
+```sh
+git clone <YOUR_GIT_URL>
+cd <YOUR_PROJECT_NAME>
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. Install dependencies:
+```sh
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. Configure API keys (optional):
 
-Follow these steps:
+Copy `.env.example` to `.env` and fill in your credentials:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+cp .env.example .env
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Edit `.env`:
+```
+# Jira Configuration
+VITE_JIRA_HOST="your-domain.atlassian.net"
+VITE_JIRA_USERNAME="your-email@example.com"
+VITE_JIRA_API_TOKEN="your-jira-api-token"
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Gemini AI Configuration
+VITE_GEMINI_API_KEY="your-gemini-api-key"
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+**Getting API Keys:**
+- **Jira**: Create an API token at https://id.atlassian.com/manage-profile/security/api-tokens
+- **Gemini**: Get your API key from https://makersuite.google.com/app/apikey
+
+4. Start the development server:
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will run at http://localhost:5173
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Usage
 
-**Use GitHub Codespaces**
+### Without API Keys (Demo Mode)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The app works out of the box with mock data:
+- Mock Jira tasks and sprints
+- Mock AI responses
 
-## What technologies are used for this project?
+This is perfect for testing and understanding the interface.
 
-This project is built with:
+### With Jira Integration
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+When Jira credentials are configured:
+- Tasks are fetched from your Jira instance
+- Status updates sync back to Jira
+- Backlog items are pulled from Jira
 
-## How can I deploy this project?
+### With Gemini AI
 
-Simply open [Lovable](https://lovable.dev/projects/b032f44c-6a5e-4a24-b79b-4607a5cbfa4d) and click on Share -> Publish.
+When Gemini API key is configured:
+- AI chat provides context-aware sprint insights
+- Recommendations based on current sprint data
+- Smart responses to your questions
 
-## Can I connect a custom domain to my Lovable project?
+## Technology Stack
 
-Yes, you can!
+- **Frontend**: React + TypeScript + Vite
+- **UI**: shadcn/ui + Tailwind CSS
+- **Jira Integration**: jira-client npm package
+- **AI**: @google/generative-ai (Gemini)
+- **State Management**: React Context
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Build
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```sh
+npm run build
+```
+
+Built files will be in the `dist/` directory.
+
+## Project Structure
+
+```
+src/
+├── components/       # UI components
+├── contexts/        # React context providers
+├── pages/           # Page components (dashboards)
+├── services/        # API services (Jira, Gemini)
+├── types/           # TypeScript type definitions
+└── lib/             # Utility functions
+```
+
+## Roles
+
+### Scrum Master Dashboard
+- Sprint health overview
+- Team engagement metrics
+- Active blockers tracking
+- Sprint board and backlog
+- AI-powered suggestions
+
+### Tech Lead Dashboard
+- Technical metrics (code review time, tech debt)
+- Dependency tracking
+- Task completion progress
+- Sprint board and backlog
+- AI assistance for technical decisions
+
+## Deployment
+
+Deploy to any static hosting service:
+- Lovable (built-in deployment)
+- Vercel
+- Netlify
+- GitHub Pages
+
+## Notes
+
+- Jira sync requires proper API credentials
+- Gemini API has usage limits on free tier
+- Mock data is used as fallback when APIs are not configured
+- The app gracefully handles API errors
+
+## Support
+
+For issues or questions, please refer to the [Lovable documentation](https://docs.lovable.dev).

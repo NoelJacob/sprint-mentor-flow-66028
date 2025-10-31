@@ -4,11 +4,11 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { TrendingUp, TrendingDown, Lightbulb, Activity } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const velocityData = [
-  { sprint: 'Sprint 1', points: 32, predicted: 30 },
-  { sprint: 'Sprint 2', points: 38, predicted: 35 },
-  { sprint: 'Sprint 3', points: 42, predicted: 40 },
-  { sprint: 'Sprint 4', points: 45, predicted: 42 },
+const completionData = [
+  { sprint: 'Sprint 1', count: 12, predicted: 10 },
+  { sprint: 'Sprint 2', count: 15, predicted: 14 },
+  { sprint: 'Sprint 3', count: 18, predicted: 16 },
+  { sprint: 'Sprint 4', count: 20, predicted: 18 },
 ];
 
 const engagementData = [
@@ -33,23 +33,23 @@ export const TrendAnalytics = () => {
         <h3 className="text-base sm:text-lg font-semibold">Trends & AI Insights</h3>
       </div>
 
-      <Tabs defaultValue="velocity" className="w-full">
+      <Tabs defaultValue="completion" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-4">
-          <TabsTrigger value="velocity" className="text-[10px] sm:text-xs">Velocity</TabsTrigger>
+          <TabsTrigger value="completion" className="text-[10px] sm:text-xs">Completion</TabsTrigger>
           <TabsTrigger value="engagement" className="text-[10px] sm:text-xs">Engagement</TabsTrigger>
           <TabsTrigger value="predictability" className="text-[10px] sm:text-xs">Predictability</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="velocity" className="mt-0">
+        <TabsContent value="completion" className="mt-0">
           <div className="h-[250px] sm:h-[300px] mb-4">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={velocityData}>
+              <LineChart data={completionData}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                 <XAxis dataKey="sprint" className="text-xs" />
                 <YAxis className="text-xs" />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: '12px' }} />
-                <Line type="monotone" dataKey="points" stroke="hsl(var(--primary))" strokeWidth={2} name="Actual" />
+                <Line type="monotone" dataKey="count" stroke="hsl(var(--primary))" strokeWidth={2} name="Actual" />
                 <Line type="monotone" dataKey="predicted" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" name="Predicted" />
               </LineChart>
             </ResponsiveContainer>
@@ -61,7 +61,7 @@ export const TrendAnalytics = () => {
               <div>
                 <p className="text-xs sm:text-sm font-medium mb-1">AI Insight</p>
                 <p className="text-xs text-muted-foreground">
-                  Velocity improved <span className="font-semibold text-green-600">+40%</span> over last 4 sprints. 
+                  Task completion improved <span className="font-semibold text-green-600">+67%</span> over last 4 sprints. 
                   Consistent upward trend suggests improved team capacity and reduced blockers.
                 </p>
               </div>
