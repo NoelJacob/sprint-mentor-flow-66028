@@ -76,7 +76,7 @@ export const SprintBoard = () => {
   const getTasksByStatus = (status: Task['status']) => 
     tasks.filter(task => task.status === status);
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: string): "destructive" | "default" | "secondary" | "outline" => {
     switch (priority.toLowerCase()) {
       case 'high': return 'destructive';
       case 'medium': return 'default';
@@ -142,7 +142,7 @@ export const SprintBoard = () => {
                           {task.key}
                         </span>
                         <Badge 
-                          variant={getPriorityColor(task.priority) as any}
+                          variant={getPriorityColor(task.priority)}
                           className="text-xs"
                         >
                           {task.priority}

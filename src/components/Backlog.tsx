@@ -37,7 +37,7 @@ export const Backlog = () => {
     loadBacklog();
   }, []);
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: string): "destructive" | "default" | "secondary" | "outline" => {
     switch (priority.toLowerCase()) {
       case 'high': return 'destructive';
       case 'medium': return 'default';
@@ -71,7 +71,7 @@ export const Backlog = () => {
                       {item.key}
                     </span>
                     <Badge 
-                      variant={getPriorityColor(item.priority) as any}
+                      variant={getPriorityColor(item.priority)}
                       className="text-xs"
                     >
                       {item.priority}

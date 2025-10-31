@@ -123,6 +123,7 @@ export const fetchJiraIssues = async (projectKey?: string): Promise<JiraIssue[]>
       }
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return searchResults.issues.map((issue: any) => ({
       id: issue.id,
       key: issue.key,
@@ -151,6 +152,7 @@ export const fetchJiraSprints = async (boardId?: number): Promise<JiraSprint[]> 
 
   try {
     const response = await client.getAllSprints(boardId || 0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return response.values.map((sprint: any) => ({
       id: sprint.id,
       name: sprint.name,
@@ -180,6 +182,7 @@ export const updateJiraIssueStatus = async (
   try {
     // Get available transitions
     const transitions = await client.listTransitions(issueKey);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transition = transitions.transitions.find(
       (t: any) => t.name.toLowerCase() === transitionName.toLowerCase()
     );
@@ -218,6 +221,7 @@ export const fetchBacklogItems = async (projectKey?: string): Promise<JiraIssue[
       }
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return searchResults.issues.map((issue: any) => ({
       id: issue.id,
       key: issue.key,

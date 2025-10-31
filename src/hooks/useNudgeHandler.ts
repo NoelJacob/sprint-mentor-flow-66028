@@ -7,7 +7,7 @@ interface UseNudgeHandlerProps {
   metrics: Metric[];
   setMetrics: React.Dispatch<React.SetStateAction<Metric[]>>;
   addActionLog: (entry: { action: string; impact: string; metricChange?: { label: string; from: string; to: string } }) => void;
-  addNudgeHistory: (entry: any) => void;
+  addNudgeHistory: (entry: { nudge: Nudge; actionTaken: string; actionLabel?: string; impact: { description: string } }) => void;
   setSprintHealthScore?: React.Dispatch<React.SetStateAction<number>>;
 }
 
