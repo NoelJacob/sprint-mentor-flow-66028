@@ -21,14 +21,14 @@ const Index = () => {
           <div className="text-center mb-8 sm:mb-12">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/10 rounded-full mb-4 sm:mb-6">
               <Sparkles className="w-4 sm:w-5 h-4 sm:h-5 text-primary" />
-              <span className="text-xs sm:text-sm font-medium text-primary">AI-Powered Agile Coach</span>
+              <span className="text-xs sm:text-sm font-medium text-primary">AI-Powered Sprint Management</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-primary bg-clip-text text-transparent px-4">
-              Agentic AI Coach
+              Sprint Manager
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4 leading-relaxed">
-              Real-time insights and proactive nudges for Scrum Masters and Tech Leads. 
-              Choose your persona to explore the dashboard.
+              Jira-synced sprint management with AI assistance. 
+              Personalized dashboards for Scrum Masters and Tech Leads.
             </p>
           </div>
 
@@ -47,21 +47,21 @@ const Index = () => {
             <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 uppercase tracking-wider font-medium">Key Features</p>
             <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto">
               <div className="p-3 sm:p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-300">
-                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Real-time Metrics</h3>
+                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Jira Sync</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  Monitor sprint health, engagement, and velocity
+                  Two-way sync with Jira for tasks, sprints, and backlog
                 </p>
               </div>
               <div className="p-3 sm:p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-300">
-                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Smart Nudges</h3>
+                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">AI Assistant</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  AI-powered recommendations with actionable insights
+                  Gemini-powered chat for sprint insights and recommendations
                 </p>
               </div>
               <div className="p-3 sm:p-4 rounded-lg bg-card border hover:shadow-md transition-all duration-300">
-                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Interactive Simulator</h3>
+                <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-foreground">Role-Based Views</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  Trigger events and see AI responses in real-time
+                  Customized dashboards for different team roles
                 </p>
               </div>
             </div>

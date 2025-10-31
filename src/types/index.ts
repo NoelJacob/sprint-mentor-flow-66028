@@ -61,12 +61,25 @@ export interface Metric {
   status?: 'healthy' | 'warning' | 'critical';
 }
 
-export interface UserStory {
+export interface Task {
   id: string;
+  key: string;
   title: string;
-  status: 'todo' | 'in-progress' | 'blocked' | 'done';
-  priority: 'low' | 'medium' | 'high';
-  blockedBy?: string;
+  description?: string;
+  status: 'To Do' | 'In Progress' | 'Blocked' | 'Done';
+  priority: 'Low' | 'Medium' | 'High';
+  assignee?: string;
+  created: string;
+  updated: string;
+}
+
+export interface Sprint {
+  id: number;
+  name: string;
+  state: 'active' | 'closed' | 'future';
+  startDate?: string;
+  endDate?: string;
+  goal?: string;
 }
 
 export interface DependencyNode {

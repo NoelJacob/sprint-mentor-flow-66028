@@ -1,15 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { PersonaSwitcher } from "@/components/PersonaSwitcher";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface DashboardHeaderProps {
   title: string;
   subtitle: string;
-  onShowGuide: () => void;
 }
 
-export const DashboardHeader = ({ title, subtitle, onShowGuide }: DashboardHeaderProps) => {
+export const DashboardHeader = ({ title, subtitle }: DashboardHeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -27,9 +26,6 @@ export const DashboardHeader = ({ title, subtitle, onShowGuide }: DashboardHeade
           </div>
           <div className="flex gap-2 self-end sm:self-auto">
             <PersonaSwitcher />
-            <Button variant="outline" size="sm" onClick={onShowGuide} className="whitespace-nowrap">
-              Show Guide
-            </Button>
           </div>
         </div>
       </div>
